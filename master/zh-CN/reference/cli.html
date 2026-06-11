@@ -37,7 +37,7 @@
             const path_to_root = "../";
             const default_light_theme = "default-dark";
             const default_dark_theme = "default-dark";
-            window.path_to_searchindex_js = "../searchindex-251ef270.js";
+            window.path_to_searchindex_js = "../searchindex-c62c6261.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-9364d956.js"></script>
@@ -308,6 +308,7 @@
 <li><a href="#zeroclaw-onboard-skills"><code>zeroclaw onboard skills</code>↴</a></li>
 <li><a href="#zeroclaw-onboard-skill_bundles"><code>zeroclaw onboard skill_bundles</code>↴</a></li>
 <li><a href="#zeroclaw-onboard-mcp"><code>zeroclaw onboard mcp</code>↴</a></li>
+<li><a href="#zeroclaw-onboard-mcp.servers"><code>zeroclaw onboard mcp.servers</code>↴</a></li>
 <li><a href="#zeroclaw-onboard-mcp_bundles"><code>zeroclaw onboard mcp_bundles</code>↴</a></li>
 <li><a href="#zeroclaw-onboard-knowledge_bundles"><code>zeroclaw onboard knowledge_bundles</code>↴</a></li>
 <li><a href="#zeroclaw-onboard-providers.tts"><code>zeroclaw onboard providers.tts</code>↴</a></li>
@@ -501,6 +502,7 @@
 <li><code>skills</code> — 技能工具设置 — 技能 markdown 文件在磁盘上的存放位置（默认为数据目录），以及技能加载器如何处理社区仓库。请在下方的 <code>skill-bundles</code> 下添加技能 BUNDLES</li>
 <li><code>skill_bundles</code> — 技能文件的命名捆绑包。智能体通过引用捆绑包，在启动时加载一组功能</li>
 <li><code>mcp</code> — 模型上下文协议（Model Context Protocol）设置。切换 <code>enabled</code> 并选择延迟加载或预先加载。各个 MCP 服务器配置位于 <code>mcp.servers[]</code> 下</li>
+<li><code>mcp.servers</code> — Individual Model Context Protocol servers. Each entry binds a transport (stdio, http, sse), the command or URL to reach it, optional headers, and a <code>tool_timeout_secs</code> cap (≤ 600). Each server’s <code>name</code> is its addressable key — rename via the section page rather than editing the field directly. Group servers into bundles under <code>mcp_bundles</code> below</li>
 <li><code>mcp_bundles</code> — MCP 服务器的命名捆绑包。代理引用捆绑包可将一组 MCP 工具作为一个整体引入</li>
 <li><code>knowledge_bundles</code> — 知识源的命名捆绑包（RAG 索引、文档文件夹）。Agent 引用某个捆绑包，以便在推理时呈现相关的代码片段</li>
 <li><code>providers.tts</code> — 文本转语音提供商（OpenAI、ElevenLabs、Google、Edge、Piper）。为每种语音/语言配置一个提供商；代理通过别名引用它们</li>
@@ -537,6 +539,9 @@
 <h2 id="zeroclaw-onboard-mcp"><a class="header" href="#zeroclaw-onboard-mcp"><code>zeroclaw onboard mcp</code></a></h2>
 <p>模型上下文协议设置。切换 <code>enabled</code> 并选择延迟加载或预加载。各个 MCP 服务器位于 <code>mcp.servers[]</code> 下</p>
 <p><strong>用法：</strong> <code>zeroclaw onboard mcp</code></p>
+<h2 id="zeroclaw-onboard-mcpservers"><a class="header" href="#zeroclaw-onboard-mcpservers"><code>zeroclaw onboard mcp.servers</code></a></h2>
+<p>Individual Model Context Protocol servers. Each entry binds a transport (stdio, http, sse), the command or URL to reach it, optional headers, and a <code>tool_timeout_secs</code> cap (≤ 600). Each server’s <code>name</code> is its addressable key — rename via the section page rather than editing the field directly. Group servers into bundles under <code>mcp_bundles</code> below</p>
+<p><strong>Usage:</strong> <code>zeroclaw onboard mcp.servers</code></p>
 <h2 id="zeroclaw-onboard-mcp_bundles"><a class="header" href="#zeroclaw-onboard-mcp_bundles"><code>zeroclaw onboard mcp_bundles</code></a></h2>
 <p>MCP 服务器的命名捆绑包。智能体引用某个捆绑包即可将一组 MCP 工具作为整体引入</p>
 <p><strong>用法：</strong> <code>zeroclaw onboard mcp_bundles</code></p>

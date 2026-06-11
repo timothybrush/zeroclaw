@@ -37,7 +37,7 @@
             const path_to_root = "../";
             const default_light_theme = "default-dark";
             const default_dark_theme = "default-dark";
-            window.path_to_searchindex_js = "../searchindex-b4e4a6ec.js";
+            window.path_to_searchindex_js = "../searchindex-44ad045e.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-8e2df50e.js"></script>
@@ -308,6 +308,7 @@
 <li><a href="#zeroclaw-onboard-skills"><code>zeroclaw onboard skills</code>↴</a></li>
 <li><a href="#zeroclaw-onboard-skill_bundles"><code>zeroclaw onboard skill_bundles</code>↴</a></li>
 <li><a href="#zeroclaw-onboard-mcp"><code>zeroclaw onboard mcp</code>↴</a></li>
+<li><a href="#zeroclaw-onboard-mcp.servers"><code>zeroclaw onboard mcp.servers</code>↴</a></li>
 <li><a href="#zeroclaw-onboard-mcp_bundles"><code>zeroclaw onboard mcp_bundles</code>↴</a></li>
 <li><a href="#zeroclaw-onboard-knowledge_bundles"><code>zeroclaw onboard knowledge_bundles</code>↴</a></li>
 <li><a href="#zeroclaw-onboard-providers.tts"><code>zeroclaw onboard providers.tts</code>↴</a></li>
@@ -501,6 +502,7 @@
 <li><code>skills</code> — Skills ツールの設定 — スキルの markdown がディスク上のどこに保存されるか（デフォルトはデータディレクトリ）、およびスキルローダーがコミュニティリポジトリをどのように扱うか。スキルの BUNDLES は以下の <code>skill-bundles</code> に追加してください</li>
 <li><code>skill_bundles</code> — スキルファイルの名前付きバンドル。エージェントはバンドルを参照して、起動時に一連の機能を読み込みます</li>
 <li><code>mcp</code> — Model Context Protocol の設定。<code>enabled</code> の切り替えと、遅延読み込みまたは事前読み込みを選択できます。個々の MCP サーバーは <code>mcp.servers[]</code> 配下で管理されます</li>
+<li><code>mcp.servers</code> — Individual Model Context Protocol servers. Each entry binds a transport (stdio, http, sse), the command or URL to reach it, optional headers, and a <code>tool_timeout_secs</code> cap (≤ 600). Each server’s <code>name</code> is its addressable key — rename via the section page rather than editing the field directly. Group servers into bundles under <code>mcp_bundles</code> below</li>
 <li><code>mcp_bundles</code> — MCP サーバーの名前付きバンドル。エージェントはバンドルを参照することで、一連の MCP ツールを1つのまとまりとして取り込みます</li>
 <li><code>knowledge_bundles</code> — 名前付きのナレッジソースのバンドル（RAGインデックス、ドキュメントフォルダー）。エージェントはバンドルを参照して、推論時に関連するスニペットを表示します</li>
 <li><code>providers.tts</code> — テキスト読み上げプロバイダー（OpenAI、ElevenLabs、Google、Edge、Piper）。音声／言語ごとに1つ設定します。エージェントはエイリアスで参照します</li>
@@ -537,6 +539,9 @@
 <h2 id="zeroclaw-onboard-mcp"><a class="header" href="#zeroclaw-onboard-mcp"><code>zeroclaw onboard mcp</code></a></h2>
 <p>Model Context Protocol の設定。<code>enabled</code> を切り替えて、遅延読み込みまたは即時読み込みを選択します。個々の MCP サーバーは <code>mcp.servers[]</code> の配下にあります</p>
 <p><strong>使用法:</strong> <code>zeroclaw onboard mcp</code></p>
+<h2 id="zeroclaw-onboard-mcpservers"><a class="header" href="#zeroclaw-onboard-mcpservers"><code>zeroclaw onboard mcp.servers</code></a></h2>
+<p>Individual Model Context Protocol servers. Each entry binds a transport (stdio, http, sse), the command or URL to reach it, optional headers, and a <code>tool_timeout_secs</code> cap (≤ 600). Each server’s <code>name</code> is its addressable key — rename via the section page rather than editing the field directly. Group servers into bundles under <code>mcp_bundles</code> below</p>
+<p><strong>Usage:</strong> <code>zeroclaw onboard mcp.servers</code></p>
 <h2 id="zeroclaw-onboard-mcp_bundles"><a class="header" href="#zeroclaw-onboard-mcp_bundles"><code>zeroclaw onboard mcp_bundles</code></a></h2>
 <p>MCPサーバーの名前付きバンドル。エージェントはバンドルを参照することで、一連のMCPツールを1つの単位としてまとめて取り込みます</p>
 <p><strong>使用方法:</strong> <code>zeroclaw onboard mcp_bundles</code></p>

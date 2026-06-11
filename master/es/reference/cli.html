@@ -37,7 +37,7 @@
             const path_to_root = "../";
             const default_light_theme = "default-dark";
             const default_dark_theme = "default-dark";
-            window.path_to_searchindex_js = "../searchindex-0c55aa6f.js";
+            window.path_to_searchindex_js = "../searchindex-098b429f.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-f27dd488.js"></script>
@@ -308,6 +308,7 @@
 <li><a href="#zeroclaw-onboard-skills"><code>zeroclaw onboard skills</code>↴</a></li>
 <li><a href="#zeroclaw-onboard-skill_bundles"><code>zeroclaw onboard skill_bundles</code>↴</a></li>
 <li><a href="#zeroclaw-onboard-mcp"><code>zeroclaw onboard mcp</code>↴</a></li>
+<li><a href="#zeroclaw-onboard-mcp.servers"><code>zeroclaw onboard mcp.servers</code>↴</a></li>
 <li><a href="#zeroclaw-onboard-mcp_bundles"><code>zeroclaw onboard mcp_bundles</code>↴</a></li>
 <li><a href="#zeroclaw-onboard-knowledge_bundles"><code>zeroclaw onboard knowledge_bundles</code>↴</a></li>
 <li><a href="#zeroclaw-onboard-providers.tts"><code>zeroclaw onboard providers.tts</code>↴</a></li>
@@ -501,6 +502,7 @@
 <li><code>skills</code> — Configuración de la herramienta de skills: dónde se almacenan los archivos markdown de skills en disco (por defecto, en el directorio de datos) y cómo el cargador de skills gestiona los repositorios de la comunidad. Agrega BUNDLES de skills en <code>skill-bundles</code> más abajo</li>
 <li><code>skill_bundles</code> — Paquetes con nombre de archivos de habilidades. Los agentes hacen referencia a un paquete para cargar un conjunto de capacidades al iniciar</li>
 <li><code>mcp</code> — Configuración de Model Context Protocol. Activa o desactiva <code>enabled</code> y elige carga diferida o anticipada. Los servidores MCP individuales se encuentran en <code>mcp.servers[]</code></li>
+<li><code>mcp.servers</code> — Individual Model Context Protocol servers. Each entry binds a transport (stdio, http, sse), the command or URL to reach it, optional headers, and a <code>tool_timeout_secs</code> cap (≤ 600). Each server’s <code>name</code> is its addressable key — rename via the section page rather than editing the field directly. Group servers into bundles under <code>mcp_bundles</code> below</li>
 <li><code>mcp_bundles</code> — Paquetes con nombre de servidores MCP. Los agentes hacen referencia a un paquete para incorporar un conjunto de herramientas MCP como una sola unidad</li>
 <li><code>knowledge_bundles</code> — Paquetes con nombre de fuentes de conocimiento (índices RAG, carpetas de documentación). Los agentes hacen referencia a un paquete para mostrar fragmentos relevantes en tiempo de inferencia</li>
 <li><code>providers.tts</code>: proveedores de texto a voz (OpenAI, ElevenLabs, Google, Edge, Piper). Configura uno por voz/idioma; los agentes los referencian mediante su alias</li>
@@ -537,6 +539,9 @@
 <h2 id="zeroclaw-onboard-mcp"><a class="header" href="#zeroclaw-onboard-mcp"><code>zeroclaw onboard mcp</code></a></h2>
 <p>Configuración de Model Context Protocol. Activa <code>enabled</code> y elige carga diferida o anticipada. Los servidores MCP individuales se encuentran en <code>mcp.servers[]</code></p>
 <p><strong>Uso:</strong> <code>zeroclaw onboard mcp</code></p>
+<h2 id="zeroclaw-onboard-mcpservers"><a class="header" href="#zeroclaw-onboard-mcpservers"><code>zeroclaw onboard mcp.servers</code></a></h2>
+<p>Individual Model Context Protocol servers. Each entry binds a transport (stdio, http, sse), the command or URL to reach it, optional headers, and a <code>tool_timeout_secs</code> cap (≤ 600). Each server’s <code>name</code> is its addressable key — rename via the section page rather than editing the field directly. Group servers into bundles under <code>mcp_bundles</code> below</p>
+<p><strong>Usage:</strong> <code>zeroclaw onboard mcp.servers</code></p>
 <h2 id="zeroclaw-onboard-mcp_bundles"><a class="header" href="#zeroclaw-onboard-mcp_bundles"><code>zeroclaw onboard mcp_bundles</code></a></h2>
 <p>Paquetes con nombre de servidores MCP. Los agentes hacen referencia a un paquete para incorporar un conjunto de herramientas MCP como una sola unidad</p>
 <p><strong>Uso:</strong> <code>zeroclaw onboard mcp_bundles</code></p>

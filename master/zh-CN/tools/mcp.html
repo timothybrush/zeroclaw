@@ -37,7 +37,7 @@
             const path_to_root = "../";
             const default_light_theme = "default-dark";
             const default_dark_theme = "default-dark";
-            window.path_to_searchindex_js = "../searchindex-251ef270.js";
+            window.path_to_searchindex_js = "../searchindex-c62c6261.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-9364d956.js"></script>
@@ -316,6 +316,13 @@
 </div>
 <p><code>env</code>（stdio）和 <code>headers</code>（http/sse）作为密钥存储；<code>headers</code> 通常携带用于上游服务器的 <code>Authorization: Bearer …</code> 令牌。</p>
 <p>通过网关、zerocode 或 <code>zeroclaw config set</code> 添加服务器（例如 <code>zeroclaw config set mcp.servers.filesystem.command npx</code>）。stdio 服务器需要 <code>command</code> 以及可选的 <code>args</code>/<code>env</code>；http/sse 服务器需要 <code>url</code> 以及可选的 <code>headers</code>。各字段对应的命令请参见下方字段表。</p>
+<h2 id="editing-servers"><a class="header" href="#editing-servers">Editing servers</a></h2>
+<p>Three surfaces edit the same <code>[[mcp.servers]]</code> table:</p>
+<ul>
+<li><strong><code>config.toml</code></strong>: hand-edit the keys documented below. The full table is round-tripped on save.</li>
+<li><strong>zerocode TUI</strong> (<code>/config</code> -&gt; <code>mcp.servers</code>): first-class per-field editor. The section shows one row per server, labeled with the server’s <code>name</code>; enter a row to edit <code>transport</code>, <code>command</code> / <code>url</code>, <code>headers</code>, <code>env</code>, and <code>tool_timeout_secs</code> as individual fields. <code>+ Add</code> creates a new entry seeded with the name you supply; deleting from the alias list removes the entry. The <code>name</code> field is not edited inline because renaming the natural key mid-edit would invalidate in-flight references; use the dashboard or hand-edit <code>config.toml</code> to rename for now.</li>
+<li><strong>Web dashboard</strong>: currently renders <code>mcp.servers</code> through a JSON-array editor. A migration to the same per-field surface the TUI uses is planned; until then the dashboard remains a usable but coarser editor.</li>
+</ul>
 <h2 id="服务器字段"><a class="header" href="#服务器字段">服务器字段</a></h2>
 <p>从 schema 生成的各服务器字段（<code>[[mcp.servers]]</code>）：</p>
 <div class="cfg-fields">
@@ -497,7 +504,7 @@
 </details>
 <details class="cfg-field">
 <summary><code>servers</code> <span class="cfg-field-meta"><code>McpServerConfig[]</code> · default <code>[]</code></span></summary>
-<p>已配置的 MCP 服务器。<code>#[nested]</code> 注解使宏将其作为 List 区块暴露在 <code>map_key_sections()</code> 中，因此仪表盘的 <code>+ Add MCP server</code> 功能与 <code>POST /api/config/map-key?path=mcp.servers&amp;key=&lt;name&gt;</code> 端点会自动识别它（无需在网关侧手动维护表格）。</p>
+<p>Configured MCP servers. The <code>#[nested]</code> annotation makes the macro expose this as a List section in <code>map_key_sections()</code>, so the dashboard’s <code>+ Add MCP server</code> affordance and the <code>POST /api/config/map-key?path=mcp.servers&amp;key=&lt;name&gt;</code> endpoint pick it up automatically (no hand-table on the gateway side). <code>#[natural_key = "name"]</code> opts the Vec into per-element property routing (see <code>route_vec_path</code> and the <code>Configurable</code> derive’s <code>#[natural_key]</code> arm). With it, <code>set_prop("mcp.servers.&lt;name&gt;.url", ...)</code> and <code>get_prop("mcp.servers.&lt;name&gt;.transport")</code> resolve to the matching element’s own <code>set_prop</code> / <code>get_prop</code>, and the <code>mcp.servers</code> section behaves like a <code>HashMap&lt;String, McpServerConfig&gt;</code> from the dashboard / TUI’s point of view. <code>name</code> itself becomes read-only via <code>set_prop</code>; rename goes through <code>rename_map_key</code> which mutates the <code>name</code> field in place.</p>
 <p><strong>将它放置在任何表面上：</strong></p>
 <div class="os-tabs-src">
 <h4 id="网关仪表板-9"><a class="header" href="#网关仪表板-9">网关仪表板</a></h4>

@@ -38,7 +38,7 @@
             const path_to_root = "";
             const default_light_theme = "default-dark";
             const default_dark_theme = "default-dark";
-            window.path_to_searchindex_js = "searchindex-b4e4a6ec.js";
+            window.path_to_searchindex_js = "searchindex-44ad045e.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-8e2df50e.js"></script>
@@ -2909,6 +2909,7 @@ zeroclaw daemon
 <li><a href="#zeroclaw-onboard-skills"><code>zeroclaw onboard skills</code>↴</a></li>
 <li><a href="#zeroclaw-onboard-skill_bundles"><code>zeroclaw onboard skill_bundles</code>↴</a></li>
 <li><a href="#zeroclaw-onboard-mcp"><code>zeroclaw onboard mcp</code>↴</a></li>
+<li><a href="#zeroclaw-onboard-mcp.servers"><code>zeroclaw onboard mcp.servers</code>↴</a></li>
 <li><a href="#zeroclaw-onboard-mcp_bundles"><code>zeroclaw onboard mcp_bundles</code>↴</a></li>
 <li><a href="#zeroclaw-onboard-knowledge_bundles"><code>zeroclaw onboard knowledge_bundles</code>↴</a></li>
 <li><a href="#zeroclaw-onboard-providers.tts"><code>zeroclaw onboard providers.tts</code>↴</a></li>
@@ -3102,6 +3103,7 @@ zeroclaw daemon
 <li><code>skills</code> — Skills ツールの設定 — スキルの markdown がディスク上のどこに保存されるか（デフォルトはデータディレクトリ）、およびスキルローダーがコミュニティリポジトリをどのように扱うか。スキルの BUNDLES は以下の <code>skill-bundles</code> に追加してください</li>
 <li><code>skill_bundles</code> — スキルファイルの名前付きバンドル。エージェントはバンドルを参照して、起動時に一連の機能を読み込みます</li>
 <li><code>mcp</code> — Model Context Protocol の設定。<code>enabled</code> の切り替えと、遅延読み込みまたは事前読み込みを選択できます。個々の MCP サーバーは <code>mcp.servers[]</code> 配下で管理されます</li>
+<li><code>mcp.servers</code> — Individual Model Context Protocol servers. Each entry binds a transport (stdio, http, sse), the command or URL to reach it, optional headers, and a <code>tool_timeout_secs</code> cap (≤ 600). Each server’s <code>name</code> is its addressable key — rename via the section page rather than editing the field directly. Group servers into bundles under <code>mcp_bundles</code> below</li>
 <li><code>mcp_bundles</code> — MCP サーバーの名前付きバンドル。エージェントはバンドルを参照することで、一連の MCP ツールを1つのまとまりとして取り込みます</li>
 <li><code>knowledge_bundles</code> — 名前付きのナレッジソースのバンドル（RAGインデックス、ドキュメントフォルダー）。エージェントはバンドルを参照して、推論時に関連するスニペットを表示します</li>
 <li><code>providers.tts</code> — テキスト読み上げプロバイダー（OpenAI、ElevenLabs、Google、Edge、Piper）。音声／言語ごとに1つ設定します。エージェントはエイリアスで参照します</li>
@@ -3138,6 +3140,9 @@ zeroclaw daemon
 <h2 id="zeroclaw-onboard-mcp"><a class="header" href="#zeroclaw-onboard-mcp"><code>zeroclaw onboard mcp</code></a></h2>
 <p>Model Context Protocol の設定。<code>enabled</code> を切り替えて、遅延読み込みまたは即時読み込みを選択します。個々の MCP サーバーは <code>mcp.servers[]</code> の配下にあります</p>
 <p><strong>使用法:</strong> <code>zeroclaw onboard mcp</code></p>
+<h2 id="zeroclaw-onboard-mcpservers"><a class="header" href="#zeroclaw-onboard-mcpservers"><code>zeroclaw onboard mcp.servers</code></a></h2>
+<p>Individual Model Context Protocol servers. Each entry binds a transport (stdio, http, sse), the command or URL to reach it, optional headers, and a <code>tool_timeout_secs</code> cap (≤ 600). Each server’s <code>name</code> is its addressable key — rename via the section page rather than editing the field directly. Group servers into bundles under <code>mcp_bundles</code> below</p>
+<p><strong>Usage:</strong> <code>zeroclaw onboard mcp.servers</code></p>
 <h2 id="zeroclaw-onboard-mcp_bundles"><a class="header" href="#zeroclaw-onboard-mcp_bundles"><code>zeroclaw onboard mcp_bundles</code></a></h2>
 <p>MCPサーバーの名前付きバンドル。エージェントはバンドルを参照することで、一連のMCPツールを1つの単位としてまとめて取り込みます</p>
 <p><strong>使用方法:</strong> <code>zeroclaw onboard mcp_bundles</code></p>
@@ -14496,6 +14501,13 @@ pub trait Tool: Send + Sync + Attributable {
 </div>
 <p><code>env</code>（stdio）と <code>headers</code>（http/sse）はシークレットとして保存されます。<code>headers</code> には通常、上流サーバー向けの <code>Authorization: Bearer …</code> トークンが含まれます。</p>
 <p>ゲートウェイ、zerocode、または <code>zeroclaw config set</code> を使用してサーバーを追加します（例：<code>zeroclaw config set mcp.servers.filesystem.command npx</code>）。stdio サーバーには <code>command</code> とオプションの <code>args</code>/<code>env</code> が必要です。http/sse サーバーには <code>url</code> とオプションの <code>headers</code> が必要です。フィールドごとのコマンドは下記のフィールド表に記載されています。</p>
+<h2 id="editing-servers"><a class="header" href="#editing-servers">Editing servers</a></h2>
+<p>Three surfaces edit the same <code>[[mcp.servers]]</code> table:</p>
+<ul>
+<li><strong><code>config.toml</code></strong>: hand-edit the keys documented below. The full table is round-tripped on save.</li>
+<li><strong>zerocode TUI</strong> (<code>/config</code> -&gt; <code>mcp.servers</code>): first-class per-field editor. The section shows one row per server, labeled with the server’s <code>name</code>; enter a row to edit <code>transport</code>, <code>command</code> / <code>url</code>, <code>headers</code>, <code>env</code>, and <code>tool_timeout_secs</code> as individual fields. <code>+ Add</code> creates a new entry seeded with the name you supply; deleting from the alias list removes the entry. The <code>name</code> field is not edited inline because renaming the natural key mid-edit would invalidate in-flight references; use the dashboard or hand-edit <code>config.toml</code> to rename for now.</li>
+<li><strong>Web dashboard</strong>: currently renders <code>mcp.servers</code> through a JSON-array editor. A migration to the same per-field surface the TUI uses is planned; until then the dashboard remains a usable but coarser editor.</li>
+</ul>
 <h2 id="サーバーフィールド"><a class="header" href="#サーバーフィールド">サーバーフィールド</a></h2>
 <p>サーバーごとのフィールド（<code>[[mcp.servers]]</code>）、スキーマから生成:</p>
 <div class="cfg-fields">
@@ -14677,7 +14689,7 @@ pub trait Tool: Send + Sync + Attributable {
 </details>
 <details class="cfg-field">
 <summary><code>servers</code> <span class="cfg-field-meta"><code>McpServerConfig[]</code> · default <code>[]</code></span></summary>
-<p>設定された MCP サーバー。<code>#[nested]</code> アノテーションにより、マクロはこれを <code>map_key_sections()</code> の List セクションとして公開します。そのため、ダッシュボードの <code>+ Add MCP server</code> 機能と <code>POST /api/config/map-key?path=mcp.servers&amp;key=&lt;name&gt;</code> エンドポイントが自動的にこれを検出します（ゲートウェイ側で手動テーブルを用意する必要はありません）。</p>
+<p>Configured MCP servers. The <code>#[nested]</code> annotation makes the macro expose this as a List section in <code>map_key_sections()</code>, so the dashboard’s <code>+ Add MCP server</code> affordance and the <code>POST /api/config/map-key?path=mcp.servers&amp;key=&lt;name&gt;</code> endpoint pick it up automatically (no hand-table on the gateway side). <code>#[natural_key = "name"]</code> opts the Vec into per-element property routing (see <code>route_vec_path</code> and the <code>Configurable</code> derive’s <code>#[natural_key]</code> arm). With it, <code>set_prop("mcp.servers.&lt;name&gt;.url", ...)</code> and <code>get_prop("mcp.servers.&lt;name&gt;.transport")</code> resolve to the matching element’s own <code>set_prop</code> / <code>get_prop</code>, and the <code>mcp.servers</code> section behaves like a <code>HashMap&lt;String, McpServerConfig&gt;</code> from the dashboard / TUI’s point of view. <code>name</code> itself becomes read-only via <code>set_prop</code>; rename goes through <code>rename_map_key</code> which mutates the <code>name</code> field in place.</p>
 <p><strong>任意のサーフェスに設定する場合:</strong></p>
 <div class="os-tabs-src">
 <h4 id="ゲートウェイダッシュボード-9-13"><a class="header" href="#ゲートウェイダッシュボード-9-13">ゲートウェイダッシュボード</a></h4>

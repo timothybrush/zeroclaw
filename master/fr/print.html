@@ -38,7 +38,7 @@
             const path_to_root = "";
             const default_light_theme = "default-dark";
             const default_dark_theme = "default-dark";
-            window.path_to_searchindex_js = "searchindex-36fe8f82.js";
+            window.path_to_searchindex_js = "searchindex-85e3e40f.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-98474cc2.js"></script>
@@ -2909,6 +2909,7 @@ zeroclaw daemon
 <li><a href="#zeroclaw-onboard-skills"><code>zeroclaw onboard skills</code>↴</a></li>
 <li><a href="#zeroclaw-onboard-skill_bundles"><code>zeroclaw onboard skill_bundles</code>↴</a></li>
 <li><a href="#zeroclaw-onboard-mcp"><code>zeroclaw onboard mcp</code>↴</a></li>
+<li><a href="#zeroclaw-onboard-mcp.servers"><code>zeroclaw onboard mcp.servers</code>↴</a></li>
 <li><a href="#zeroclaw-onboard-mcp_bundles"><code>zeroclaw onboard mcp_bundles</code>↴</a></li>
 <li><a href="#zeroclaw-onboard-knowledge_bundles"><code>zeroclaw onboard knowledge_bundles</code>↴</a></li>
 <li><a href="#zeroclaw-onboard-providers.tts"><code>zeroclaw onboard providers.tts</code>↴</a></li>
@@ -3102,6 +3103,7 @@ zeroclaw daemon
 <li><code>skills</code> — Paramètres de l’outil Skills — emplacement des fichiers markdown des skills sur le disque (par défaut, le répertoire de données), et comment le chargeur de skills gère les dépôts communautaires. Ajoutez des BUNDLES de skills sous <code>skill-bundles</code> ci-dessous</li>
 <li><code>skill_bundles</code> — Ensembles nommés de fichiers de compétences. Les agents référencent un ensemble pour charger un groupe de capacités au démarrage</li>
 <li><code>mcp</code> — Paramètres du Model Context Protocol. Activez/désactivez <code>enabled</code> et choisissez le chargement différé ou immédiat. Les serveurs MCP individuels se trouvent sous <code>mcp.servers[]</code></li>
+<li><code>mcp.servers</code> — Individual Model Context Protocol servers. Each entry binds a transport (stdio, http, sse), the command or URL to reach it, optional headers, and a <code>tool_timeout_secs</code> cap (≤ 600). Each server’s <code>name</code> is its addressable key — rename via the section page rather than editing the field directly. Group servers into bundles under <code>mcp_bundles</code> below</li>
 <li><code>mcp_bundles</code> — Lots nommés de serveurs MCP. Les agents référencent un lot pour intégrer un ensemble d’outils MCP en une seule unité</li>
 <li><code>knowledge_bundles</code> — Lots nommés de sources de connaissances (index RAG, dossiers de documentation). Les agents référencent un lot pour faire remonter les extraits pertinents au moment de l’inférence</li>
 <li><code>providers.tts</code> — Fournisseurs de synthèse vocale (OpenAI, ElevenLabs, Google, Edge, Piper). Configurez-en un par voix / langue ; les agents les référencent par alias</li>
@@ -3138,6 +3140,9 @@ zeroclaw daemon
 <h2 id="zeroclaw-onboard-mcp"><a class="header" href="#zeroclaw-onboard-mcp"><code>zeroclaw onboard mcp</code></a></h2>
 <p>Paramètres du Model Context Protocol. Activez <code>enabled</code> et choisissez le chargement différé ou immédiat. Les serveurs MCP individuels se trouvent sous <code>mcp.servers[]</code></p>
 <p><strong>Utilisation :</strong> <code>zeroclaw onboard mcp</code></p>
+<h2 id="zeroclaw-onboard-mcpservers"><a class="header" href="#zeroclaw-onboard-mcpservers"><code>zeroclaw onboard mcp.servers</code></a></h2>
+<p>Individual Model Context Protocol servers. Each entry binds a transport (stdio, http, sse), the command or URL to reach it, optional headers, and a <code>tool_timeout_secs</code> cap (≤ 600). Each server’s <code>name</code> is its addressable key — rename via the section page rather than editing the field directly. Group servers into bundles under <code>mcp_bundles</code> below</p>
+<p><strong>Usage:</strong> <code>zeroclaw onboard mcp.servers</code></p>
 <h2 id="zeroclaw-onboard-mcp_bundles"><a class="header" href="#zeroclaw-onboard-mcp_bundles"><code>zeroclaw onboard mcp_bundles</code></a></h2>
 <p>Ensembles nommés de serveurs MCP. Les agents référencent un ensemble pour importer un groupe d’outils MCP comme une seule unité</p>
 <p><strong>Utilisation :</strong> <code>zeroclaw onboard mcp_bundles</code></p>
@@ -14498,6 +14503,13 @@ pub trait Tool: Send + Sync + Attributable {
 </div>
 <p><code>env</code> (stdio) et <code>headers</code> (http/sse) sont stockés en tant que secrets ; <code>headers</code> contient généralement le jeton <code>Authorization: Bearer …</code> pour le serveur en amont.</p>
 <p>Ajoutez un serveur via la passerelle, zerocode, ou <code>zeroclaw config set</code> (par exemple <code>zeroclaw config set mcp.servers.filesystem.command npx</code>). Un serveur stdio nécessite <code>command</code> plus <code>args</code>/<code>env</code> optionnels ; un serveur http/sse nécessite <code>url</code> plus <code>headers</code> optionnels. Les commandes par champ figurent dans le tableau des champs ci-dessous.</p>
+<h2 id="editing-servers"><a class="header" href="#editing-servers">Editing servers</a></h2>
+<p>Three surfaces edit the same <code>[[mcp.servers]]</code> table:</p>
+<ul>
+<li><strong><code>config.toml</code></strong>: hand-edit the keys documented below. The full table is round-tripped on save.</li>
+<li><strong>zerocode TUI</strong> (<code>/config</code> -&gt; <code>mcp.servers</code>): first-class per-field editor. The section shows one row per server, labeled with the server’s <code>name</code>; enter a row to edit <code>transport</code>, <code>command</code> / <code>url</code>, <code>headers</code>, <code>env</code>, and <code>tool_timeout_secs</code> as individual fields. <code>+ Add</code> creates a new entry seeded with the name you supply; deleting from the alias list removes the entry. The <code>name</code> field is not edited inline because renaming the natural key mid-edit would invalidate in-flight references; use the dashboard or hand-edit <code>config.toml</code> to rename for now.</li>
+<li><strong>Web dashboard</strong>: currently renders <code>mcp.servers</code> through a JSON-array editor. A migration to the same per-field surface the TUI uses is planned; until then the dashboard remains a usable but coarser editor.</li>
+</ul>
 <h2 id="champs-du-serveur"><a class="header" href="#champs-du-serveur">Champs du serveur</a></h2>
 <p>Champs par serveur (<code>[[mcp.servers]]</code>), générés à partir du schéma :</p>
 <div class="cfg-fields">
@@ -14679,7 +14691,7 @@ pub trait Tool: Send + Sync + Attributable {
 </details>
 <details class="cfg-field">
 <summary><code>servers</code> <span class="cfg-field-meta"><code>McpServerConfig[]</code> · default <code>[]</code></span></summary>
-<p>Serveurs MCP configurés. L’annotation <code>#[nested]</code> fait en sorte que la macro expose ceci comme une section List dans <code>map_key_sections()</code>, de sorte que l’affordance <code>+ Add MCP server</code> du tableau de bord et le point de terminaison <code>POST /api/config/map-key?path=mcp.servers&amp;key=&lt;name&gt;</code> le prennent en compte automatiquement (pas de table manuelle côté passerelle).</p>
+<p>Configured MCP servers. The <code>#[nested]</code> annotation makes the macro expose this as a List section in <code>map_key_sections()</code>, so the dashboard’s <code>+ Add MCP server</code> affordance and the <code>POST /api/config/map-key?path=mcp.servers&amp;key=&lt;name&gt;</code> endpoint pick it up automatically (no hand-table on the gateway side). <code>#[natural_key = "name"]</code> opts the Vec into per-element property routing (see <code>route_vec_path</code> and the <code>Configurable</code> derive’s <code>#[natural_key]</code> arm). With it, <code>set_prop("mcp.servers.&lt;name&gt;.url", ...)</code> and <code>get_prop("mcp.servers.&lt;name&gt;.transport")</code> resolve to the matching element’s own <code>set_prop</code> / <code>get_prop</code>, and the <code>mcp.servers</code> section behaves like a <code>HashMap&lt;String, McpServerConfig&gt;</code> from the dashboard / TUI’s point of view. <code>name</code> itself becomes read-only via <code>set_prop</code>; rename goes through <code>rename_map_key</code> which mutates the <code>name</code> field in place.</p>
 <p><strong>Posez-le sur n’importe quelle surface :</strong></p>
 <div class="os-tabs-src">
 <h4 id="tableau-de-bord-de-la-passerelle-9-13"><a class="header" href="#tableau-de-bord-de-la-passerelle-9-13">Tableau de bord de la passerelle</a></h4>
