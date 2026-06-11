@@ -33,7 +33,7 @@ channel session hydration.</p>
     agent_alias: &amp;<a class="primitive" href="https://doc.rust-lang.org/1.96.0/std/primitive.str.html">str</a>,
     session_cwd: <a class="enum" href="https://doc.rust-lang.org/1.96.0/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="https://doc.rust-lang.org/1.96.0/std/path/struct.Path.html" title="struct std::path::Path">Path</a>&gt;,
 ) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.96.0/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="struct" href="struct.Agent.html" title="struct zeroclaw::agent::Agent">Agent</a>, <a class="struct" href="https://docs.rs/anyhow/1.0.102/anyhow/struct.Error.html" title="struct anyhow::Error">Error</a>&gt;</h4></section></summary><div class="docblock"><p>Build an Agent with an optional per-session working directory override.</p>
-<p><code>session_cwd</code>, when supplied, becomes <a href="../../zeroclaw_config/policy/struct.SecurityPolicy.html#structfield.workspace_dir" title="field zeroclaw_config::policy::SecurityPolicy::workspace_dir"><code>SecurityPolicy::workspace_dir</code></a>
+<p><code>session_cwd</code>, when supplied, becomes [<code>SecurityPolicy::workspace_dir</code>]
 for this agent — i.e. the boundary used by file_read/write/edit and the
 cwd used by the shell tool. Memory storage, identity files, scheduled
 task DBs, and other on-disk state continue to live under
